@@ -25,7 +25,6 @@ import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.ImageReader;
 import android.media.ThumbnailUtils;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -39,8 +38,6 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,8 +46,6 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -78,11 +73,7 @@ public class Camera2BasicFragment extends Fragment
     private boolean runClassifier = false;
     private boolean checkedPermissions = false;
     private TextView textView;
-    private NumberPicker np;
     private ImageClassifier classifier;
-    private BottomSheetBehavior<LinearLayout> sheetBehavior;
-    private LinearLayout bottomSheetLayout;
-    private LinearLayout gestureLayout;
     private TextView resultTextView;
     private TextView aslTextView;
     /** Max preview width that is guaranteed by Camera2 API */
@@ -302,7 +293,7 @@ public class Camera2BasicFragment extends Fragment
         textureView = (AutoFitTextureView) view.findViewById(R.id.texture);
         textView = (TextView) view.findViewById(R.id.text);
 
-        np = (NumberPicker) view.findViewById(R.id.np);
+        NumberPicker np = (NumberPicker) view.findViewById(R.id.np);
         np.setMinValue(1);
         np.setMaxValue(10);
         np.setWrapSelectorWheel(true);
@@ -321,54 +312,7 @@ public class Camera2BasicFragment extends Fragment
                 });
 
         resultTextView = view.findViewById(R.id.result_text_view);
-        bottomSheetLayout = view.findViewById(R.id.bottom_sheet_layout);
-        gestureLayout = view.findViewById(R.id.gesture_layout);
-        sheetBehavior = BottomSheetBehavior.from(bottomSheetLayout);
-
         aslTextView = view.findViewById(R.id.asl_text_view);
-
-        ViewTreeObserver vto = gestureLayout.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(
-                new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                            gestureLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                        } else {
-                            gestureLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                        }
-                        //                int width = bottomSheetLayout.getMeasuredWidth();
-                        int height = gestureLayout.getMeasuredHeight();
-
-                        sheetBehavior.setPeekHeight(height);
-                    }
-                });
-        sheetBehavior.setHideable(false);
-
-        sheetBehavior.setBottomSheetCallback(
-                new BottomSheetBehavior.BottomSheetCallback() {
-                    @Override
-                    public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                        switch (newState) {
-                            case BottomSheetBehavior.STATE_HIDDEN:
-                                break;
-                            case BottomSheetBehavior.STATE_EXPANDED: {
-                            }
-                            break;
-                            case BottomSheetBehavior.STATE_COLLAPSED: {
-                            }
-                            break;
-                            case BottomSheetBehavior.STATE_DRAGGING:
-                                break;
-                            case BottomSheetBehavior.STATE_SETTLING:
-                                break;
-                        }
-                    }
-
-                    @Override
-                    public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                    }
-                });
     }
 
     /** Load the model and labels. */
