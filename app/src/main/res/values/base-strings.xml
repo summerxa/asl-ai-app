@@ -16,16 +16,6 @@
 -->
 
 <resources>
-    <string name="app_name">Alphabet App</string>
-    <string name="intro_message">
-        <![CDATA[
-
-
-            This sample demonstrates the basic use of TfLite API. Check the source code to see how
-            you can use TfLite for efficient, on-device inference with trained TensorFlow models.
-
-
-        ]]>
-    </string>
+    <string name="app_name">Alphabet Interpreter</string>
     <string name="threads">Threads:</string>
 </resources>
