@@ -112,6 +112,10 @@ public class Camera2BasicFragment extends Fragment
     /** ID of the current {@link CameraDevice}. */
     private String cameraId;
 
+    private boolean isFront = true;
+    private String frontCameraId;
+    private String backCameraId;
+
     /** An {@link AutoFitTextureView} for camera preview. */
     private AutoFitTextureView textureView;
 
@@ -290,8 +294,18 @@ public class Camera2BasicFragment extends Fragment
     /** Connect the buttons to their event handler. */
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
-        textureView = (AutoFitTextureView) view.findViewById(R.id.texture);
-        textView = (TextView) view.findViewById(R.id.text);
+        textureView = view.findViewById(R.id.texture);
+        textView = view.findViewById(R.id.text);
+        view.findViewById(R.id.camera_button).setOnClickListener(view1 -> {
+            isFront = !isFront;
+            cameraId = (isFront || backCameraId == null) ? frontCameraId : backCameraId;
+            closeCamera();
+            if (textureView.isAvailable()) {
+                openCamera(textureView.getWidth(), textureView.getHeight());
+            } else {
+                textureView.setSurfaceTextureListener(surfaceTextureListener);
+            }
+        });
 
         NumberPicker np = (NumberPicker) view.findViewById(R.id.np);
         np.setMinValue(1);
@@ -368,10 +382,14 @@ public class Camera2BasicFragment extends Fragment
         Activity activity = getActivity();
         CameraManager manager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
         try {
-            String camId = chooseCamera(manager);
-            // Front and back camera is not present or not accessible
+            String camId = cameraId;
             if (camId == null) {
-                throw new IllegalStateException("Camera Not Found");
+                camId = chooseCamera(manager);
+                // Front and back camera is not present or not accessible
+                if (camId == null) {
+                    throw new IllegalStateException("Camera Not Found");
+                }
+                this.cameraId = camId;
             }
             CameraCharacteristics characteristics = manager.getCameraCharacteristics(camId);
 
@@ -448,8 +466,6 @@ public class Camera2BasicFragment extends Fragment
             } else {
                 textureView.setAspectRatio(previewSize.getHeight(), previewSize.getWidth());
             }
-
-            this.cameraId = camId;
         } catch (CameraAccessException e) {
             Log.e(TAG, "Failed to access Camera", e);
         } catch (NullPointerException e) {
@@ -469,8 +485,8 @@ public class Camera2BasicFragment extends Fragment
      * @throws CameraAccessException
      */
     private String chooseCamera(CameraManager manager) throws CameraAccessException {
-        String frontCameraId = null;
-        String backCameraId = null;
+        frontCameraId = null;
+        backCameraId = null;
         if (manager != null && manager.getCameraIdList().length > 0) {
             for (String camId : manager.getCameraIdList()) {
                 CameraCharacteristics characteristics = manager.getCameraCharacteristics(camId);
@@ -717,7 +733,7 @@ public class Camera2BasicFragment extends Fragment
         classifier.classifyFrame(bitmap, textToShow);
         bitmap.recycle();
 
-        Log.e("amlan", textToShow.toString());
+//        Log.e("amlan", textToShow.toString());
 
         if (textToShow.toString().contains(":")) {
             String token = textToShow.toString().substring(0, textToShow.toString().indexOf(":"));

@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/bottom_sheet_bg"
     android:orientation="vertical"
-    app:behavior_hideable="true"
+    app:behavior_hideable="false"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <LinearLayout
@@ -15,13 +15,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingBottom="20dp">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/icn_chevron_up" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -32,16 +25,25 @@
                 android:id="@+id/asl_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:gravity="center"
-                android:textSize="32sp"
-                android:layout_weight="1" />
+                android:textSize="36sp" />
 
             <TextView
                 android:id="@+id/result_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:layout_gravity="start"
+                android:textSize="12sp" />
         </LinearLayout>
+
+        <Button
+            android:id="@+id/camera_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:text="@string/switch_button" />
 
     </LinearLayout>
 

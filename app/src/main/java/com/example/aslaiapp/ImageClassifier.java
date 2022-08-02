@@ -130,7 +130,7 @@ public class ImageClassifier {
         long startTime = SystemClock.uptimeMillis();
         runInference();
         long endTime = SystemClock.uptimeMillis();
-        Log.d(TAG, "Timecost to run model inference: " + (endTime - startTime));
+//        Log.d(TAG, "Timecost to run model inference: " + (endTime - startTime));
 
         // Smooth the results across frames.
         applyFilter();
