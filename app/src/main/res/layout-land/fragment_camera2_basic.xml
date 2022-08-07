@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#efefef"
@@ -7,11 +8,25 @@
 
     <com.example.aslaiapp.AutoFitTextureView
         android:id="@+id/texture"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight=".8"/>
 
-    <include
-        android:id="@+id/bottom_sheet_layout"
-        layout="@layout/layout_bottom_sheet" />
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight=".2"
+        android:background="#ffffff"
+        android:orientation="vertical">
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <View
+            android:id="@+id/view2"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+
+        <include
+            android:id="@+id/bottom_sheet_layout"
+            layout="@layout/layout_bottom_sheet" />
+
+    </LinearLayout>
+</LinearLayout>

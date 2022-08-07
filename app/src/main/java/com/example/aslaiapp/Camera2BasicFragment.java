@@ -38,7 +38,6 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -293,17 +292,6 @@ public class Camera2BasicFragment extends Fragment
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         textureView = view.findViewById(R.id.texture);
-        // TODO(a) uncomment button below
-//        view.findViewById(R.id.camera_button).setOnClickListener(view1 -> {
-//            isFront = !isFront;
-//            cameraId = (isFront || backCameraId == null) ? frontCameraId : backCameraId;
-//            closeCamera();
-//            if (textureView.isAvailable()) {
-//                openCamera(textureView.getWidth(), textureView.getHeight());
-//            } else {
-//                textureView.setSurfaceTextureListener(surfaceTextureListener);
-//            }
-//        });
 
         resultTextView = view.findViewById(R.id.result_text_view);
         aslTextView = view.findViewById(R.id.asl_text_view);
@@ -566,6 +554,17 @@ public class Camera2BasicFragment extends Fragment
             throw new RuntimeException("Interrupted while trying to lock camera closing.", e);
         } finally {
             cameraOpenCloseLock.release();
+        }
+    }
+
+    public void switchCamera() {
+        isFront = !isFront;
+        cameraId = (isFront || backCameraId == null) ? frontCameraId : backCameraId;
+        closeCamera();
+        if (textureView.isAvailable()) {
+            openCamera(textureView.getWidth(), textureView.getHeight());
+        } else {
+            textureView.setSurfaceTextureListener(surfaceTextureListener);
         }
     }
 

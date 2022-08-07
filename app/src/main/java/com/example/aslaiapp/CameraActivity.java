@@ -8,15 +8,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 /** Main {@code Activity} class for the Camera app. */
 public class CameraActivity extends AppCompatActivity {
+    Camera2BasicFragment camera;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
-        if (null == savedInstanceState) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.container, Camera2BasicFragment.newInstance())
-                    .commit();
-        }
+        camera = Camera2BasicFragment.newInstance();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, camera)
+                .commit();
+        findViewById(R.id.camera_button).setOnClickListener(view1 -> {
+            camera.switchCamera();
+        });
     }
 }
