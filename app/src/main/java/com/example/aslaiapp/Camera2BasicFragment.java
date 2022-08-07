@@ -72,7 +72,6 @@ public class Camera2BasicFragment extends Fragment
     private final Object lock = new Object();
     private boolean runClassifier = false;
     private boolean checkedPermissions = false;
-    private TextView textView;
     private ImageClassifier classifier;
     private TextView resultTextView;
     private TextView aslTextView;
@@ -215,7 +214,6 @@ public class Camera2BasicFragment extends Fragment
                     new Runnable() {
                         @Override
                         public void run() {
-                            textView.setText(builder, TextView.BufferType.SPANNABLE);
                             resultTextView.setText(builder, TextView.BufferType.SPANNABLE);
                         }
                     });
@@ -295,35 +293,17 @@ public class Camera2BasicFragment extends Fragment
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         textureView = view.findViewById(R.id.texture);
-        textView = view.findViewById(R.id.text);
-        view.findViewById(R.id.camera_button).setOnClickListener(view1 -> {
-            isFront = !isFront;
-            cameraId = (isFront || backCameraId == null) ? frontCameraId : backCameraId;
-            closeCamera();
-            if (textureView.isAvailable()) {
-                openCamera(textureView.getWidth(), textureView.getHeight());
-            } else {
-                textureView.setSurfaceTextureListener(surfaceTextureListener);
-            }
-        });
-
-        NumberPicker np = (NumberPicker) view.findViewById(R.id.np);
-        np.setMinValue(1);
-        np.setMaxValue(10);
-        np.setWrapSelectorWheel(true);
-        np.setOnValueChangedListener(
-                new NumberPicker.OnValueChangeListener() {
-                    @Override
-                    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                        synchronized (lock) {
-                            try {
-                                classifier.setNumThreads(newVal);
-                            } catch (IOException e) {
-                                Log.e(TAG, "Failed to setNumThreads.", e);
-                            }
-                        }
-                    }
-                });
+        // TODO(a) uncomment button below
+//        view.findViewById(R.id.camera_button).setOnClickListener(view1 -> {
+//            isFront = !isFront;
+//            cameraId = (isFront || backCameraId == null) ? frontCameraId : backCameraId;
+//            closeCamera();
+//            if (textureView.isAvailable()) {
+//                openCamera(textureView.getWidth(), textureView.getHeight());
+//            } else {
+//                textureView.setSurfaceTextureListener(surfaceTextureListener);
+//            }
+//        });
 
         resultTextView = view.findViewById(R.id.result_text_view);
         aslTextView = view.findViewById(R.id.asl_text_view);
@@ -729,11 +709,13 @@ public class Camera2BasicFragment extends Fragment
 
         Bitmap origionalBitmal = textureView.getBitmap();
 
-        Bitmap bitmap = ThumbnailUtils.extractThumbnail(origionalBitmal, 224, 224);
+        Bitmap rotatedBitmap = Bitmap.createBitmap( origionalBitmal, 0, 0,
+                origionalBitmal.getWidth(), origionalBitmal.getHeight(),
+                textureView.getTransform( null ), true );
+
+        Bitmap bitmap = ThumbnailUtils.extractThumbnail(rotatedBitmap, 224, 224);
         classifier.classifyFrame(bitmap, textToShow);
         bitmap.recycle();
-
-//        Log.e("amlan", textToShow.toString());
 
         if (textToShow.toString().contains(":")) {
             String token = textToShow.toString().substring(0, textToShow.toString().indexOf(":"));
