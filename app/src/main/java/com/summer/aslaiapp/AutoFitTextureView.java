@@ -1,4 +1,4 @@
-package com.example.aslaiapp;
+package com.summer.aslaiapp;
 
 import android.content.Context;
 import android.util.AttributeSet;

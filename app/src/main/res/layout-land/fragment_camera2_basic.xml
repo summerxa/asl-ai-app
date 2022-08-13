@@ -6,7 +6,7 @@
     android:background="#efefef"
     android:orientation="horizontal">
 
-    <com.example.aslaiapp.AutoFitTextureView
+    <com.summer.aslaiapp.AutoFitTextureView
         android:id="@+id/texture"
         android:layout_width="0dp"
         android:layout_height="match_parent"

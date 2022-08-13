@@ -1,4 +1,4 @@
-package com.example.aslaiapp;
+package com.summer.aslaiapp;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -6,7 +6,6 @@ import android.os.SystemClock;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 
 import com.google.mediapipe.formats.proto.LandmarkProto;
 import com.google.mediapipe.solutions.hands.Hands;
@@ -28,9 +27,6 @@ import org.tensorflow.lite.support.common.FileUtil;
 
 /** Classifies images with Tensorflow Lite. */
 public class ImageClassifier {
-    /** Tag for the {@link Log}. */
-    private static final String TAG = "TfLiteCameraDemo";
-
     /** Number of results to show in the UI. */
     private static final int RESULTS_TO_SHOW = 3;
 
@@ -90,8 +86,6 @@ public class ImageClassifier {
                 .setMaxNumHands(2)
                 .setRunOnGpu(true).build();
         handFinder = new Hands(activity, handsOptions);
-        handFinder.setErrorListener(
-                (message, e) -> Log.e(TAG, "MediaPipe Hands error:" + message));
         handFinder.setResultListener(
                 handsResult -> {
                     if (handsResult.multiHandLandmarks().isEmpty()) {
@@ -108,8 +102,6 @@ public class ImageClassifier {
                         handData[i*3+2] = landmark.getZ();
                     }
                 });
-
-        Log.d(TAG, "Created a Tensorflow Lite Image Classifier.");
     }
 
     /** Classifies a frame from the preview stream. */
@@ -117,7 +109,6 @@ public class ImageClassifier {
         printTopKLabels(builder);
 
         if (tflite == null) {
-            Log.e(TAG, "Image classifier has not been initialized; Skipped.");
             builder.append(new SpannableString("Uninitialized Classifier."));
         }
 

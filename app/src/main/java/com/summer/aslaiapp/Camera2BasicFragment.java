@@ -1,4 +1,4 @@
-package com.example.aslaiapp;
+package com.summer.aslaiapp;
 
 import android.Manifest;
 import android.app.Activity;
@@ -31,7 +31,6 @@ import android.os.HandlerThread;
 import android.os.Process;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
-import android.util.Log;
 import android.util.Size;
 import android.view.LayoutInflater;
 import android.view.Surface;
@@ -58,9 +57,6 @@ import java.util.concurrent.TimeUnit;
 /** Basic fragments for the Camera. */
 public class Camera2BasicFragment extends Fragment
         implements ActivityCompat.OnRequestPermissionsResultCallback {
-
-    /** Tag for the {@link Log}. */
-    private static final String TAG = "TfLiteCameraDemo";
 
     private static final String FRAGMENT_DIALOG = "dialog";
 
@@ -272,7 +268,6 @@ public class Camera2BasicFragment extends Fragment
         } else if (notBigEnough.size() > 0) {
             return Collections.max(notBigEnough, new CompareSizesByArea());
         } else {
-            Log.e(TAG, "Couldn't find any suitable preview size");
             return choices[0];
         }
     }
@@ -305,8 +300,8 @@ public class Camera2BasicFragment extends Fragment
             // create either a new ImageClassifierQuantizedMobileNet or an ImageClassifierFloatInception
             //      classifier = new ImageClassifierQuantizedMobileNet(getActivity());
             classifier = new ImageClassifier(getActivity());
-        } catch (IOException e) {
-            Log.e(TAG, "Failed to initialize an image classifier.", e);
+        } catch (IOException ignored) {
+
         }
         startBackgroundThread();
     }
@@ -393,7 +388,6 @@ public class Camera2BasicFragment extends Fragment
                     }
                     break;
                 default:
-                    Log.e(TAG, "Display rotation is invalid: " + displayRotation);
             }
 
             Point displaySize = new Point();
@@ -434,8 +428,8 @@ public class Camera2BasicFragment extends Fragment
             } else {
                 textureView.setAspectRatio(previewSize.getHeight(), previewSize.getWidth());
             }
-        } catch (CameraAccessException e) {
-            Log.e(TAG, "Failed to access Camera", e);
+        } catch (CameraAccessException ignored) {
+
         } catch (NullPointerException e) {
             // Currently an NPE is thrown when the Camera2API is used but not supported on the
             // device this code runs.
@@ -511,8 +505,8 @@ public class Camera2BasicFragment extends Fragment
                 return;
             }
             manager.openCamera(cameraId, stateCallback, backgroundHandler);
-        } catch (CameraAccessException e) {
-            Log.e(TAG, "Failed to open Camera", e);
+        } catch (CameraAccessException ignored) {
+
         } catch (InterruptedException e) {
             throw new RuntimeException("Interrupted while trying to lock camera opening.", e);
         }
@@ -589,8 +583,8 @@ public class Camera2BasicFragment extends Fragment
             synchronized (lock) {
                 runClassifier = false;
             }
-        } catch (InterruptedException e) {
-            Log.e(TAG, "Interrupted when stopping background thread", e);
+        } catch (InterruptedException ignored) {
+
         }
     }
 
@@ -648,8 +642,8 @@ public class Camera2BasicFragment extends Fragment
                                 previewRequest = previewRequestBuilder.build();
                                 captureSession.setRepeatingRequest(
                                         previewRequest, captureCallback, backgroundHandler);
-                            } catch (CameraAccessException e) {
-                                Log.e(TAG, "Failed to set up config to capture Camera", e);
+                            } catch (CameraAccessException ignored) {
+
                             }
                         }
 
@@ -659,8 +653,8 @@ public class Camera2BasicFragment extends Fragment
                         }
                     },
                     null);
-        } catch (CameraAccessException e) {
-            Log.e(TAG, "Failed to preview Camera", e);
+        } catch (CameraAccessException ignored) {
+
         }
     }
 
