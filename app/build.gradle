@@ -3,6 +3,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('C:\\Users\\MangoPotato\\Documents\\Keystores\\upload_keystore.jks')
+            storePassword 'Thre54ebeach!'
+            keyPassword 'Thre54ebeach!'
+            keyAlias 'upload'
+        }
+    }
     compileSdk 32
 
     defaultConfig {
@@ -13,6 +21,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.release
     }
 
     buildTypes {
