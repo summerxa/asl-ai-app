@@ -17,7 +17,7 @@
         android:roundIcon="@mipmap/hand_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/MaterialTheme"
-        tools:targetApi="31" >
+        tools:targetApi="33" >
         <activity
             android:name="com.summer.aslaiapp.CameraActivity"
             android:screenOrientation="fullSensor"
